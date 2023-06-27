@@ -96,7 +96,7 @@ let handleSubmit = async (e) => {
         </div>
         <div className="mt-4">
           <input
-            type="text"
+            type="password"
             placeholder="Private Key"
             className="border border-black w-full p-2 rounded-md"
             value={privateKey}

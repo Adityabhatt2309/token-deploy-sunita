@@ -119,7 +119,7 @@ const Dejitarusuko = () => {
         </div>
         <div className="my-4">
           <input
-            type="text"
+            type="password"
             placeholder="Private Key"
             className="border border-black w-full p-2 rounded-md"
             value={privateKey}
