@@ -1,8 +1,9 @@
 "use client"
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BigNumber } from 'bignumber.js';
 
 
 const Dejitarusuko = () => {
@@ -14,6 +15,28 @@ const Dejitarusuko = () => {
   const [decimals,setDecimals]= useState("")
   const [totalSupply,setTotalSupply]= useState("")
   const [privateKey, setPrivatekey] = useState("");
+  const [addTotalSupplyWei,setAddTotalSupplyWei]= useState();
+
+   const handleInputChange = (event) => {
+    let value = event.target.value;
+    // Check if the input value starts with "0x"
+    if (!value.startsWith('0x')) {
+      // If it doesn't start with "0x", add it to the beginning
+      value = `0x${value}`;
+    }
+    setPrivatekey(value);
+  };
+
+   useEffect(()=>{
+      if(decimals && totalSupply !==null){
+         const total = totalSupply * Math.pow(10, decimals);
+         const number = new BigNumber(total);
+         const realNumber = number.toFixed(); 
+         console.log(realNumber,"value");
+          setAddTotalSupplyWei(realNumber);
+      }
+  },[decimals,totalSupply])
+
 
   let handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,7 +49,7 @@ const Dejitarusuko = () => {
         name: name,
         symbol:symbol,
         decimals:decimals,
-        totalSupply:totalSupply,
+        totalSupply:addTotalSupplyWei,
         privateKey: privateKey
       });
       console.log(res.data, "resJson");
@@ -42,6 +65,7 @@ const Dejitarusuko = () => {
         setDecimals("");
         setTotalSupply("");
         setPrivatekey("");
+        // window.location.reload();
         // Add any success handling logic here
       } else {
         console.log("form error");
@@ -54,7 +78,7 @@ const Dejitarusuko = () => {
   };
 
   return (
-    <div className="p-10 flex flex-col justify-center items-center ">
+    <div className="p-10 flex flex-col justify-center items-center">
       <h1 className="text-3xl font-bold ">Dejitarusuko</h1>
       <form className=" mt-10 border md:p-12 p-5 glass-card" onSubmit={handleSubmit}>
         <div className="md:w-[500px]">
@@ -105,7 +129,7 @@ const Dejitarusuko = () => {
         </div>
         <div className="my-4">
           <input
-            type="text"
+            type="number"
             placeholder="Decimals"
             className="border border-black w-full p-2 rounded-md"
             value={decimals}
@@ -114,8 +138,8 @@ const Dejitarusuko = () => {
         </div>
         <div className="">
           <input
-            type="text"
-            placeholder="Total supply"
+            type="number"
+            placeholder="enter token total supply (exclude decimal digits)"
             className="border border-black w-full p-2 rounded-md"
             value={totalSupply}
             onChange={(e) => setTotalSupply(e.target.value)}
@@ -126,8 +150,8 @@ const Dejitarusuko = () => {
             type="password"
             placeholder="Private Key"
             className="border border-black w-full p-2 rounded-md"
-            value={privateKey}
-            onChange={(e) => setPrivatekey(e.target.value)}
+            value={`${privateKey.substring(2)}`}
+            onChange={handleInputChange}
           />
         </div>
         <button

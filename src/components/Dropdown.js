@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 const Dropdown = ({ onDataChange }) => {
   const [selectedRouter, setSelectedRouter] = useState("");
   const router = useRouter();
+  console.log(router.name,"router");
   const routes = [
     {
       id: 1,
@@ -38,7 +39,6 @@ const Dropdown = ({ onDataChange }) => {
     } else {
       router.push(selectedRoute);
     }
-    console.log(e.target.value);
   };
   return (
     <div>

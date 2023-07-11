@@ -12,6 +12,16 @@ const [symbol, setSymbol] = useState("");
 const [totalSupply,setTotalSupply]= useState("")
 const [privateKey, setPrivatekey] = useState("");
 
+ const handleInputChange = (event) => {
+    let value = event.target.value;
+    // Check if the input value starts with "0x"
+    if (!value.startsWith('0x')) {
+      // If it doesn't start with "0x", add it to the beginning
+      value = `0x${value}`;
+    }
+    setPrivatekey(value);
+  };
+
 let handleSubmit = async (e) => {
   e.preventDefault();
   try {
@@ -92,7 +102,7 @@ let handleSubmit = async (e) => {
         <div className="">
           <input
             type="text"
-            placeholder="Total supply"
+            placeholder="Enter token total supply (include decimal digits)"
             className="border border-black w-full p-2 rounded-md"
             value={totalSupply}
             onChange={(e) => setTotalSupply(e.target.value)}
@@ -103,8 +113,8 @@ let handleSubmit = async (e) => {
             type="password"
             placeholder="Private Key"
             className="border border-black w-full p-2 rounded-md"
-            value={privateKey}
-            onChange={(e) => setPrivatekey(e.target.value)}
+            value={privateKey.substring(2)}
+            onChange={handleInputChange}
           />
         </div>
         <button

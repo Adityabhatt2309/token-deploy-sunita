@@ -1,7 +1,8 @@
-import React,{useState} from 'react';
+import React,{useEffect, useState} from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { BigNumber } from 'bignumber.js';
 
 
 const BigEyes = () => {
@@ -12,19 +13,31 @@ const BigEyes = () => {
     const [decimals, setDecimals] = useState("");
     const [totalSupply, setTotalSupply] = useState("");
     const [privateKey, setPrivatekey] = useState("");
+    const [addTotalSupplyWei,setAddTotalSupplyWei]= useState();
 
-    const handleInputChange = (event) => {
+  const handleInputChange = (event) => {
     let value = event.target.value;
-
-    // Check if the input value starts with "0x"
     if (!value.startsWith('0x')) {
-      // If it doesn't start with "0x", add it to the beginning
       value = `0x${value}`;
+      setPrivatekey(value);
+    }else{
+      setPrivatekey(value);
     }
-    setPrivatekey(value);
   };
-  
-    let handleSubmit = async (e) => {
+
+  useEffect(()=>{
+      if(decimals && totalSupply !==null){
+         const total = totalSupply * Math.pow(10, decimals);
+         const number = new BigNumber(total);
+         const realNumber = number.toFixed(); 
+         console.log(realNumber,"value");
+          setAddTotalSupplyWei(realNumber);
+      }
+  },[decimals,totalSupply])
+
+  console.log(addTotalSupplyWei,"addTotalSupplyWei");
+
+  let handleSubmit = async (e) => {
       e.preventDefault();
       try {
         console.log("DATA enter field");
@@ -34,7 +47,7 @@ const BigEyes = () => {
           name: name,
           symbol: symbol,
           decimals: decimals,
-          totalSupply: totalSupply,
+          totalSupply: addTotalSupplyWei,
           privateKey: privateKey
         });
         console.log(res.data, "resJson");
@@ -49,6 +62,7 @@ const BigEyes = () => {
           setTotalSupply("");
           setPrivatekey("");
           console.log("success");
+          // window.location.reload();
           // Add any success handling logic here
         } else {
           console.log("form error");
@@ -59,6 +73,7 @@ const BigEyes = () => {
         console.log(err);
       }
     };
+
   return (
     <div className='p-10 flex flex-col justify-center items-center '>
         <form
@@ -104,9 +119,11 @@ const BigEyes = () => {
           </div>
           <div className="">
             <input
-              type="text"
+              type="number"
               value={decimals}
-              placeholder="enter token decimals"
+              min={1}
+              max={18}
+              placeholder="enter token decimals range 1 to 18"
               onChange={(e) => setDecimals(e.target.value)}
               className="border border-black w-full p-2 rounded-md"
             />
@@ -115,7 +132,7 @@ const BigEyes = () => {
             <input
               type="text"
               value={totalSupply}
-              placeholder="enter token total supply"
+              placeholder="enter token total supply (exclude decimal digits)"
               onChange={(e) => setTotalSupply(e.target.value)}
               className="border border-black w-full p-2 rounded-md"
             />
@@ -123,12 +140,13 @@ const BigEyes = () => {
           <div className="">
             <input
                type="password"
-               value={`${privateKey}`}
+               value={privateKey.substring(2)}
                placeholder="enter wallet private key"
                onChange={handleInputChange}
               className="border border-black w-full p-2 rounded-md"
             />
           </div>
+
           <button
             type="submit"
             className="btn border mt-5  py-2 px-8 rounded-md float-right"
@@ -136,7 +154,7 @@ const BigEyes = () => {
             Submit
           </button>
         </form>
-         <ToastContainer/>
+        <ToastContainer/>
     </div>
   )
 }
