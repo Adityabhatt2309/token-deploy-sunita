@@ -2,11 +2,13 @@
 import axios from "axios"
 import { useState } from "react"
 import React from 'react'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Jeju = () => {
 const [contractName, setContractName] = useState("");
-const [templateName, setTemplateName] = useState("");
+const [templateName, setTemplateName] = useState("JEJU");
 const [router,setRouter]= useState("")
 const [name, setName] = useState("");
 const [symbol, setSymbol] = useState("");
@@ -16,7 +18,7 @@ let handleSubmit = async (e) => {
   e.preventDefault();
   try {
     console.log("DATA enter field");
-    let res = await axios.post("http://3.230.239.114/deploy/jeju", {
+    let res = await axios.post("https://deployment.debwebdomain.xyz/deploy/jeju", {
       contractName: contractName,
       templateName: templateName,
       router:router,
@@ -28,6 +30,7 @@ let handleSubmit = async (e) => {
 
     if (res.status === 200) {
       console.log("success");
+      toast("Form Submitted Succesfull");
       setContractName("");
       setTemplateName("");
       setRouter("");
@@ -63,7 +66,8 @@ let handleSubmit = async (e) => {
             type="text"
             placeholder="Template Name"
             className="border border-black w-full p-2 rounded-md"
-            value={templateName}
+            disabled="true"
+            value="JEJU"
             onChange={(e) => setTemplateName(e.target.value)}
           />
         </div>
@@ -110,6 +114,7 @@ let handleSubmit = async (e) => {
           Submit
         </button>
       </form>
+       <ToastContainer/>
     </div>
   )
 }

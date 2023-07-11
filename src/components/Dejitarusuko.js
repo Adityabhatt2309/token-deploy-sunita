@@ -1,11 +1,13 @@
 "use client"
 import React,{useState} from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const Dejitarusuko = () => {
   const [contractName, setContractName] = useState("");
-  const [templateName, setTemplateName] = useState("");
+  const [templateName, setTemplateName] = useState("DejitaruTsuka");
   const [router,setRouter]= useState("")
   const [name, setName] = useState("");
   const [symbol,setSymbol]= useState("");
@@ -17,7 +19,7 @@ const Dejitarusuko = () => {
     e.preventDefault();
     try {
       console.log("DATA enter field");
-      let res = await axios.post("http://3.230.239.114/deploy/dejitarutsuka", {
+      let res = await axios.post("https://deployment.debwebdomain.xyz/deploy/dejitarutsuka", {
         contractName: contractName,
         templateName: templateName,
         router:router,
@@ -30,6 +32,7 @@ const Dejitarusuko = () => {
       console.log(res.data, "resJson");
   
       if (res.status === 200) {
+        toast("Form Submitted Succesfull");
         console.log("success");
         setContractName("");
         setTemplateName("");
@@ -68,7 +71,8 @@ const Dejitarusuko = () => {
             type="text"
             placeholder="Template Name"
             className="border border-black w-full p-2 rounded-md"
-            value={templateName}
+            disabled="true"
+            value="DejitaruTsuka"
             onChange={(e) => setTemplateName(e.target.value)}
           />
         </div>
@@ -133,6 +137,7 @@ const Dejitarusuko = () => {
           Submit
         </button>
       </form>
+      <ToastContainer/>
     </div>
   )
 }

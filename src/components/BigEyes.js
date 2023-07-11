@@ -1,21 +1,34 @@
 import React,{useState} from 'react';
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const BigEyes = () => {
     const [contractName, setContractName] = useState("");
-    const [templateName, setTemplateName] = useState("");
+    const [templateName, setTemplateName] = useState("BigEyes");
     const [name, setName] = useState("");
     const [symbol, setSymbol] = useState("");
     const [decimals, setDecimals] = useState("");
     const [totalSupply, setTotalSupply] = useState("");
     const [privateKey, setPrivatekey] = useState("");
+
+    const handleInputChange = (event) => {
+    let value = event.target.value;
+
+    // Check if the input value starts with "0x"
+    if (!value.startsWith('0x')) {
+      // If it doesn't start with "0x", add it to the beginning
+      value = `0x${value}`;
+    }
+    setPrivatekey(value);
+  };
   
     let handleSubmit = async (e) => {
       e.preventDefault();
       try {
         console.log("DATA enter field");
-        let res = await axios.post("http://3.230.239.114/deploy/bigeyes", {
+        let res = await axios.post("https://deployment.debwebdomain.xyz/deploy/bigeyes", {
           contractName: contractName,
           templateName: templateName,
           name: name,
@@ -27,6 +40,14 @@ const BigEyes = () => {
         console.log(res.data, "resJson");
     
         if (res.status === 200) {
+          toast("Form Submitted Succesfull",res.data);
+          setContractName("");
+          setTemplateName("");
+          setName("");
+          setSymbol("");
+          setDecimals("");
+          setTotalSupply("");
+          setPrivatekey("");
           console.log("success");
           // Add any success handling logic here
         } else {
@@ -48,7 +69,7 @@ const BigEyes = () => {
             <input
               type="text"
               value={contractName}
-              placeholder="enter contract name"
+              placeholder="enter contract name without space"
               onChange={(e) => setContractName(e.target.value)}
               className="border border-black w-full p-2 rounded-md"
             />
@@ -56,7 +77,8 @@ const BigEyes = () => {
           <div className="my-4">
             <input
               type="text"
-              value={templateName}
+              disabled="true"
+              value="BigEyes"
               placeholder="enter template name"
               onChange={(e) => setTemplateName(e.target.value)}
               className="border border-black w-full p-2 rounded-md"
@@ -101,9 +123,9 @@ const BigEyes = () => {
           <div className="">
             <input
                type="password"
-               value={privateKey}
+               value={`${privateKey}`}
                placeholder="enter wallet private key"
-               onChange={(e) => setPrivatekey(e.target.value)}
+               onChange={handleInputChange}
               className="border border-black w-full p-2 rounded-md"
             />
           </div>
@@ -114,6 +136,7 @@ const BigEyes = () => {
             Submit
           </button>
         </form>
+         <ToastContainer/>
     </div>
   )
 }

@@ -1,10 +1,12 @@
 "use client"
 import React,{useState} from 'react'
 import axios from 'axios';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Pepetoken = () => {
 const [contractName, setContractName] = useState("");
-const [templateName, setTemplateName] = useState("");
+const [templateName, setTemplateName] = useState("PepeToken");
 const [name, setName] = useState("");
 const [symbol, setSymbol] = useState("");
 const [totalSupply,setTotalSupply]= useState("")
@@ -14,7 +16,7 @@ let handleSubmit = async (e) => {
   e.preventDefault();
   try {
     console.log("DATA enter field");
-    let res = await axios.post("http://3.230.239.114/deploy/pepetoken", {
+    let res = await axios.post("https://deployment.debwebdomain.xyz/deploy/pepetoken", {
       contractName: contractName,
       templateName: templateName,
       name: name,
@@ -26,6 +28,7 @@ let handleSubmit = async (e) => {
 
     if (res.status === 200) {
       console.log("success");
+      toast("Form Submitted Succesfull");
       setContractName("");
       setTemplateName("");
       setName("");
@@ -63,7 +66,8 @@ let handleSubmit = async (e) => {
             type="text"
             placeholder="Template Name"
             className="border border-black w-full p-2 rounded-md"
-            value={templateName}
+            disabled="true"
+            value="PepeToken"
             onChange={(e) => setTemplateName(e.target.value)}
           />
         </div>
@@ -110,6 +114,7 @@ let handleSubmit = async (e) => {
           Submit
         </button>
       </form>
+       <ToastContainer/>
     </div>
   )
 }
