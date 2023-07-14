@@ -1,8 +1,11 @@
-import React,{useEffect, useState} from 'react';
+import React,{useEffect, useState,CSSProperties} from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { BigNumber } from 'bignumber.js';
+import ClipLoader from "react-spinners/ClipLoader";
+
+
 
 
 const BigEyes = () => {
@@ -14,6 +17,13 @@ const BigEyes = () => {
     const [totalSupply, setTotalSupply] = useState("");
     const [privateKey, setPrivatekey] = useState("");
     const [addTotalSupplyWei,setAddTotalSupplyWei]= useState();
+    const[selectedValue, setSelectedValue] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [color, setColor] = useState("green");
+
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
 
   const handleInputChange = (event) => {
     let value = event.target.value;
@@ -25,6 +35,7 @@ const BigEyes = () => {
     }
   };
 
+  console.log(selectedValue,"selectedValue");
   useEffect(()=>{
       if(decimals && totalSupply !==null){
          const total = totalSupply * Math.pow(10, decimals);
@@ -39,6 +50,7 @@ const BigEyes = () => {
 
   let handleSubmit = async (e) => {
       e.preventDefault();
+      setLoading(true)
       try {
         console.log("DATA enter field");
         let res = await axios.post("https://deployment.debwebdomain.xyz/deploy/bigeyes", {
@@ -48,19 +60,20 @@ const BigEyes = () => {
           symbol: symbol,
           decimals: decimals,
           totalSupply: addTotalSupplyWei,
-          privateKey: privateKey
+          privateKey: privateKey,
+          chainId:Number(selectedValue)
         });
-        console.log(res.data, "resJson");
-    
         if (res.status === 200) {
           toast("Form Submitted Succesfull",res.data);
           setContractName("");
-          setTemplateName("");
+          setLoading(false)
+          // setTemplateName("");
           setName("");
           setSymbol("");
           setDecimals("");
           setTotalSupply("");
           setPrivatekey("");
+          setSelectedValue("")
           console.log("success");
           // window.location.reload();
           // Add any success handling logic here
@@ -130,11 +143,11 @@ const BigEyes = () => {
           </div>
           <div className="py-4">
             <input
-              type="text"
+              type="number"
               value={totalSupply}
               placeholder="enter token total supply (exclude decimal digits)"
               onChange={(e) => setTotalSupply(e.target.value)}
-              className="border border-black w-full p-2 rounded-md"
+              className="appearance_remove border border-black w-full p-2 rounded-md"
             />
           </div>
           <div className="">
@@ -146,12 +159,38 @@ const BigEyes = () => {
               className="border border-black w-full p-2 rounded-md"
             />
           </div>
-
+           <div className="">
+           <select
+            name="Chain Select"
+            className="mt-4 bg-transparent border w-full p-2 rounded-md"
+            value={selectedValue}
+            onChange={handleChange}
+            >
+              <option disabled value={""} >Select Chain ID</option>
+               <option value="1">Ethereum Mainnet</option>
+               <option value="250">Fantom Opera</option>
+               <option value="56">BSC Mainnet</option>
+               <option value="42161">Arbitrum One</option>
+               <option value="137">Polygon Mainnet</option>
+               <option value="97">BSC Testnet</option>
+               <option value="4002">Fantom Testnet</option>
+          </select>
+          </div>
           <button
             type="submit"
             className="btn border mt-5  py-2 px-8 rounded-md float-right"
           >
-            Submit
+            {
+              loading?
+               <ClipLoader
+                color={color}
+                loading={loading}
+                className="block mx-auto border-red"
+                size={20}
+                aria-label="Loading Spinner"
+                data-testid="loader"
+            />:"submit"
+            }
           </button>
         </form>
         <ToastContainer/>

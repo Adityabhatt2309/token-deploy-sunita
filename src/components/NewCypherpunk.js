@@ -12,7 +12,12 @@ const [router,setRouter]= useState("")
 const [name, setName] = useState("");
 const [symbol, setSymbol] = useState("");
 const [privateKey, setPrivatekey] = useState("");
+const[selectedValue, setSelectedValue] = useState('');
 
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+  
 
  const handleInputChange = (event) => {
     let value = event.target.value;
@@ -34,7 +39,8 @@ let handleSubmit = async (e) => {
       router:router,
       name: name,
       symbol: symbol,
-      privateKey: privateKey
+      privateKey: privateKey,
+      chainId:Number(selectedValue)
     });
     console.log(res.data, "resJson");
 
@@ -42,11 +48,12 @@ let handleSubmit = async (e) => {
       console.log("success");
       toast("Form Submitted Succesfull");
       setContractName("");
-      setTemplateName("");
+      // setTemplateName("");
       setRouter("");
       setName("");
       setSymbol("");
       setPrivatekey("");
+      setSelectedValue("");
       // Add any success handling logic here
     } else {
       console.log("form error");
@@ -118,6 +125,23 @@ let handleSubmit = async (e) => {
             onChange={handleInputChange}
         />
       </div>
+      <div className="my-4">
+          <select
+            name="Chain Select"
+            className="mt-4 bg-transparent border w-full p-2 rounded-md"
+            value={selectedValue}
+            onChange={handleChange}
+            >
+              <option disabled value={""} >Select Chain ID</option>
+                <option value="1">Ethereum Mainnet</option>
+               <option value="250">Fantom Opera</option>
+               <option value="56">BSC Mainnet</option>
+               <option value="42161">Arbitrum One</option>
+               <option value="137">Polygon Mainnet</option>
+               <option value="97">BSC Testnet</option>
+               <option value="4002">Fantom Testnet</option>
+          </select>
+        </div>
       <button
         type="submit"
         className="border mt-5 btn py-2 px-8 rounded-md float-right"

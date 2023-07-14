@@ -16,7 +16,13 @@ const Dejitarusuko = () => {
   const [totalSupply,setTotalSupply]= useState("")
   const [privateKey, setPrivatekey] = useState("");
   const [addTotalSupplyWei,setAddTotalSupplyWei]= useState();
+  const[selectedValue, setSelectedValue] = useState('');
 
+
+    const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+  
    const handleInputChange = (event) => {
     let value = event.target.value;
     // Check if the input value starts with "0x"
@@ -50,7 +56,8 @@ const Dejitarusuko = () => {
         symbol:symbol,
         decimals:decimals,
         totalSupply:addTotalSupplyWei,
-        privateKey: privateKey
+        privateKey: privateKey,
+        chainId:Number(selectedValue)
       });
       console.log(res.data, "resJson");
   
@@ -58,13 +65,14 @@ const Dejitarusuko = () => {
         toast("Form Submitted Succesfull");
         console.log("success");
         setContractName("");
-        setTemplateName("");
+        // setTemplateName("");
         setRouter("");
         setName("");
         setSymbol("");
         setDecimals("");
         setTotalSupply("");
         setPrivatekey("");
+        setSelectedValue("");
         // window.location.reload();
         // Add any success handling logic here
       } else {
@@ -140,7 +148,7 @@ const Dejitarusuko = () => {
           <input
             type="number"
             placeholder="enter token total supply (exclude decimal digits)"
-            className="border border-black w-full p-2 rounded-md"
+            className="appearance_remove border border-black w-full p-2 rounded-md"
             value={totalSupply}
             onChange={(e) => setTotalSupply(e.target.value)}
           />
@@ -153,6 +161,23 @@ const Dejitarusuko = () => {
             value={`${privateKey.substring(2)}`}
             onChange={handleInputChange}
           />
+        </div>
+         <div className="my-4">
+          <select
+            name="Chain Select"
+            className="mt-4 bg-transparent border w-full p-2 rounded-md"
+            value={selectedValue}
+            onChange={handleChange}
+            >
+              <option disabled value={""} >Select Chain ID</option>
+                <option value="1">Ethereum Mainnet</option>
+               <option value="250">Fantom Opera</option>
+               <option value="56">BSC Mainnet</option>
+               <option value="42161">Arbitrum One</option>
+               <option value="137">Polygon Mainnet</option>
+               <option value="97">BSC Testnet</option>
+               <option value="4002">Fantom Testnet</option>
+          </select>
         </div>
         <button
           type="submit"

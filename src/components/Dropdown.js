@@ -1,11 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import ClipLoader from "react-spinners/ClipLoader";
 
 const Dropdown = ({ onDataChange }) => {
   const [selectedRouter, setSelectedRouter] = useState("");
   const router = useRouter();
-  console.log(router.name,"router");
+
   const routes = [
     {
       id: 1,
@@ -29,8 +30,6 @@ const Dropdown = ({ onDataChange }) => {
     },
   ];
 
-
-
   const changeHandler = (e) => {
     const selectedRoute = e.target.value;
     setSelectedRouter(selectedRoute);
@@ -50,6 +49,7 @@ const Dropdown = ({ onDataChange }) => {
             onChange={changeHandler}
           >
             {routes.map((route) => (
+              
               <option
                 key={route.id}
                 value={route.name}
