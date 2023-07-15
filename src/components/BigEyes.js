@@ -111,6 +111,7 @@ const BigEyes = () => {
 
   return (
     <div className='p-10 flex flex-col justify-center items-center relative'>
+      <h1 className="text-3xl font-bold ">Big Eyes</h1>
         <form
            onSubmit={handleSubmit}
           className=" mt-10 border md:p-12 p-5 glass-card"

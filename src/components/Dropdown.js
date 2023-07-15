@@ -1,16 +1,20 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-
+import BigEyes from "@/components/BigEyes";
+import NewCypherpunk from "./NewCypherpunk";
+import Dejitarusuko from "./Dejitarusuko";
+import Jeju from "./Jeju";
+import Pepetoken from "./Pepetoken";
 
 const Dropdown = ({ onDataChange }) => {
-  const [selectedRouter, setSelectedRouter] = useState("");
+  const [selectedRouter, setSelectedRouter] = useState("BigEyesPage");
   const router = useRouter();
-
+console.log(router)
   const routes = [
     {
       id: 1,
-      name: "BigEyes",
+      name: "BigEyesPage",
     },
     {
       id: 2,
@@ -31,14 +35,10 @@ const Dropdown = ({ onDataChange }) => {
   ];
 
   const changeHandler = (e) => {
-    const selectedRoute = e.target.value;
-    setSelectedRouter(selectedRoute);
-    if (selectedRoute === "BigEyes") {
-      router.push("/");
-    } else {
-      router.push(selectedRoute);
-    }
+    setSelectedRouter(e.target.value);
   };
+
+  console.log(selectedRouter,"selectedRoute");
   return (
     <div>
       <div className="flex flex-col justify-center items-center">
@@ -60,6 +60,13 @@ const Dropdown = ({ onDataChange }) => {
             ))}
           </select>
         </div>
+          <div className="p-10 flex flex-col justify-center items-center ">
+            { selectedRouter == "BigEyesPage"? <BigEyes/>:''}
+            {selectedRouter == "NeoCypherpunk"? <NewCypherpunk/>:''}  
+            {selectedRouter == "DejitaruTsuka"? <Dejitarusuko/>:''}  
+            {selectedRouter == "JEJU"? <Jeju/>:''}  
+            {selectedRouter == "PepeToken"? <Pepetoken/>:''} 
+      </div>
       </div>
     </div>
   );
