@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import Dropdown from "@/components/Dropdown";
 
 export default function Home() {
@@ -31,6 +30,7 @@ export default function Home() {
     <main>
       <div className="container mx-auto lg:inline flex flex-col justify-center px-5 py-10 gap-5 items-center ">
           <Dropdown/>
+          <h1>hello</h1>
        </div>
     </main>
   );

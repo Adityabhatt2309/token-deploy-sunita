@@ -1,4 +1,3 @@
-import React from "react";
 import "./globals.css";
 
 export const metadata = {
@@ -10,9 +9,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/back.png" sizes="any" />
+        <link rel="icon" href="/favicon.png" sizes="any" />
       </head>
-      <body className="">
+      <body>
         {children}
       </body>
     </html>
